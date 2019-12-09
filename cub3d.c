@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-temm <ade-temm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 16:54:42 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/06 20:07:31 by ade-temm         ###   ########.fr       */
+/*   Updated: 2019/12/09 13:01:39 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,15 @@ void	position(t_map *scene)
 			if (ft_is_digit(scene->map[x][y]) == 0)
 			{
 				if (scene->map[x][y] == 'E')
-					scene->angle = 0;
-				if (scene->map[x][y] == 'N')
 					scene->angle = 90;
-				if (scene->map[x][y] == 'W')
+				if (scene->map[x][y] == 'N')
 					scene->angle = 180;
-				if (scene->map[x][y] == 'S')
+				if (scene->map[x][y] == 'W')
 					scene->angle = 270;
-				scene->pos_y = y;
-				scene->pos_x = x;
+				if (scene->map[x][y] == 'S')
+					scene->angle = 0;
+				scene->pos_y = y + 0.5;
+				scene->pos_x = x + 0.5;
 				printf("\nMON TYPE = [%c]\n", scene->map[x][y]);
 				scene->map[x][y] = '0';
 			}
@@ -134,104 +134,96 @@ void	print_map(t_map *map)
 	}
 }
 
-t_len		calc_v(t_map *tab)
+void		calc_dist_xy(t_map *tab, t_len *dist)
 {
-	t_len		dist;
-	dist.hit = 0;
-
-	dist.v_y = cos(tab->angle * M_PI / 180);
-	dist.v_y = sin(tab->angle * M_PI / 180);
-	printf("\ndistvx = |%f|\n", dist.v_x);
-	printf("\ndistvy = |%f|\n", dist.v_y);
-	// dist.deltaDistX = dist.v_x;
-	// dist.deltaDistY = dist.v_y;
-	dist.deltaDistX = sqrt(1 + (dist.v_y * dist.v_y) / (dist.v_x * dist.v_x));
-	dist.deltaDistY = sqrt(1 + (dist.v_x * dist.v_x) / (dist.v_y * dist.v_y));
-	printf("\ndeltax = |%f|\n", dist.deltaDistX);
-	printf("\ndeltay = |%f|\n", dist.deltaDistY);
-	dist.norme = sqrt((dist.v_x * dist.v_x) + (dist.v_y * dist.v_y));
-	return (dist);
+	if (dist->rayDirX < 0)
+	{
+		dist->stepX = -1;
+		dist->sideDistX = (tab->pos_x - tab->map_x) * dist->deltaDistX; 
+	}
+	else
+	{
+		dist->stepX = 1;
+		dist->sideDistX = (tab->map_x + 1.0 - tab->pos_x) * dist->deltaDistX;
+	}
+	if (dist->rayDirY < 0)
+	{
+		dist->stepY = -1;
+		dist->sideDistY = (tab->pos_y - tab->map_y) * dist->deltaDistY; 
+	}
+	else
+	{
+		dist->stepY = 1;
+		dist->sideDistY = (tab->map_y + 1.0 - tab->pos_y) * dist->deltaDistY;
+	}
 }
 
-double		calc_dist(t_map *tab, t_len dist)
+void		calc_dist(t_map *tab, t_len *dist)
 {
-	tab->cam_x = tab->pos_x;
-	tab->cam_y = tab->pos_y;
-	// printf("\nangle = [%f]\n", tab->angle);
-	if (tab->angle <= 90)
+	ft_init_ray(tab, dist);
+	calc_dist_xy(tab, dist);
+	while (dist->hit == 0) 
 	{
-		dist.stepX = -1;
-		dist.sideDistX = (tab->cam_x - (int)tab->cam_x) * dist.deltaDistX; 
-		printf("\nsideDistX1 = |%f|\n", dist.sideDistX);
-		// printf("\nentier1 x=|%f| y=|%f|\n", tab->cam_x, tab->cam_y);
-	}
-	else
-	{
-		// printf("\nentier2 x=|%f| y=|%f|\n", tab->cam_x, tab->cam_y);
-		dist.stepX = 1;
-		dist.sideDistX = ((int)tab->cam_x + 1.0 - tab->cam_x) * dist.deltaDistX;
-		printf("\nsideDistX2 = |%f|\n", dist.sideDistX);
-	}
-	if (tab->angle > 90 && tab->angle < 270)
-	{
-		// printf("\nentier3 x=|%f| y=|%f|\n", tab->cam_x, tab->cam_y);
-		dist.stepY = -1;
-		dist.sideDistY = (tab->cam_y - (int)tab->cam_y) * dist.deltaDistY; 
-		printf("\nsideDistY1 = |%f|\n", dist.sideDistY);
-	}
-	else
-	{
-		// printf("\nentier4 x=|%f| y=|%f|\n", tab->cam_x, tab->cam_y);
-		dist.stepY = 1;
-		dist.sideDistY = ((int)tab->cam_y + 1.0 - tab->cam_y) * dist.deltaDistY;
-		printf("\nsideDistY1 = |%f|\n", dist.sideDistY);
-	}
-	while (dist.hit == 0) 
-	{
-		if (dist.sideDistX < dist.sideDistY) 
+		if (dist->sideDistX < dist->sideDistY) 
 		{
-			// printf("\nentrer if x=|%f| y=|%f|\n", tab->cam_x, tab->cam_y);
-			dist.sideDistX += dist.deltaDistX;
-			tab->cam_x += dist.stepX;
-			dist.side = 0;
-			// printf("\nsortie if x=|%f| y=|%f|\n", tab->cam_x, tab->cam_y);
+			dist->sideDistX += dist->deltaDistX;
+			tab->map_x += dist->stepX;
+			dist->side = 0;
 		}
 		else
 		{
-			// printf("\nentrer else x=|%f| y=|%f|\n", tab->cam_x, tab->cam_y);
-			dist.sideDistY += dist.deltaDistY;
-			tab->cam_y += dist.stepY;
-			dist.side = 1;
-			// printf("\nsortie else x=|%f| y=|%f|\n", tab->cam_x, tab->cam_y);
+			dist->sideDistY += dist->deltaDistY;
+			tab->map_y += dist->stepY;
+			dist->side = 1;
 		}
-		// printf("\ncam_x = |%f| cam_y = |%f|\n", tab->cam_x, tab->cam_y);
-		if (tab->map[(int)tab->cam_x][(int)tab->cam_y] > '0')
-			dist.hit = 1;
+		if (tab->map[tab->map_x][tab->map_y] > '0')
+			dist->hit = 1;
 	}
-	// printf();
-	return (dist.sideDistX <= dist.sideDistY ? dist.sideDistX : dist.sideDistY);
+	if (dist->side == 0)
+		dist->perpWallDist = ((tab->map_x-tab->pos_x+(1-dist->stepX)/2)/ dist->rayDirX);
+	else
+		dist->perpWallDist = ((tab->map_y-tab->pos_y+(1-dist->stepY)/2)/ dist->rayDirY);
+}
 
+void		ft_init_ray(t_map *tab, t_len *dist)
+{
+	dist->hit = 0;
+	dist->cameraX = (2 * dist->x / dist->w) - 1;
+	dist->planx = cos((tab->angle + 90) * M_PI / 180) * 0.66;
+	dist->plany = sin((tab->angle + 90) * M_PI / 180) * 0.66;
+	dist->rayDirX = cos(tab->angle * M_PI / 180) + dist->planx * dist->cameraX;
+	dist->rayDirY = sin(tab->angle * M_PI / 180) + dist->plany * dist->cameraX; 
+	dist->deltaDistX = sqrt(1 + (dist->rayDirY * dist->rayDirY) / (dist->rayDirX * dist->rayDirX));
+	dist->deltaDistY = sqrt(1 + (dist->rayDirX * dist->rayDirX) / (dist->rayDirY * dist->rayDirY));
+	tab->map_x = (int)tab->pos_x;
+	tab->map_y = (int)tab->pos_y;
+	
 }
 
 int		main(int ac, char **av)
 {
 	t_doc	doc;
-	t_map	*scene;
-	t_len	dist;
+	t_map	*tab;
+	t_len	*dist;
 	double		i;
 	
-	if (!(scene = (t_map*)malloc(sizeof(t_map))))
+	if (!(tab = (t_map*)malloc(sizeof(t_map))))
+		return (-1);
+	if (!(dist = (t_len*)malloc(sizeof(t_len))))
 		return (-1);
 	doc = parse_map(av);
-	scene->map = ft_split(doc.map, '.');
-	clean_map(scene);
-	position(scene); //Recupere la position de départ et remplace la lettrepar un 0. Initialise l'angle de départ.
-	print_map(scene);  
-	dist = calc_v(scene);
-	i = calc_dist(scene, dist);
-	if (i >= 0)
-		printf("\ndistance == |%f|\n", i);
-	else
-		printf("\ndistance == |%f|\n", i * -1);
+	tab->map = ft_split(doc.map, '.');
+	clean_map(tab);
+	position(tab); //Recupere la position de départ et remplace la lettrepar un 0. Initialise l'angle de départ.
+	print_map(tab); 
+	dist->x = 0;
+	dist->w = 200;
+	dist->h = 200;
+	while (dist->x <= dist->w)
+	{
+		calc_dist(tab, dist);
+		printf("\ndistance == |%f|\n", dist->perpWallDist);
+		dist->x++;
+	}
 
 }	

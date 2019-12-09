@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-temm <ade-temm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 11:18:10 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/06 19:54:26 by ade-temm         ###   ########.fr       */
+/*   Updated: 2019/12/09 11:15:20 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,30 @@ typedef struct	s_doc
 	char		*map;
 }				t_doc;
 
+typedef struct	s_key
+{
+	double		vitMarche;
+	double		vitRotation;
+	int			avancer;
+	int			reculer;
+	int			tourner;
+	int			droite;
+	int			gauche;
+	
+
+}				t_key;
+
 typedef struct	s_len
 {
-	double		v_x;
-	double		v_y;
+	double 		planx;
+	double 		plany;
+	int			x;
+	int			w;
+	int			h;
+	double		cameraX;
+	double		perpWallDist;
+	double		rayDirX;
+	double		rayDirY;
 	double		deltaDistX;
 	double		deltaDistY;
 	int 		entier_x;
@@ -67,8 +87,8 @@ typedef struct	s_map
 	double		angle;
 	double		pos_x;
 	double		pos_y;
-	double		cam_x;
-	double		cam_y;
+	int			map_x;
+	int			map_y;
 	t_color		floor;
 	t_color		plafond;
 }				t_map;

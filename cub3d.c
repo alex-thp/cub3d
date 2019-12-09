@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 16:54:42 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/09 13:01:39 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/09 14:25:15 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,21 @@ void	print_map(t_map *map)
 	}
 }
 
+void	wall_distance(t_len *dist, t_map *tab)
+{
+	if (dist->side == 0)
+		dist->perpWallDist = ((tab->map_x-tab->pos_x+(1-dist->stepX)/2)/ dist->rayDirX);
+	else
+		dist->perpWallDist = ((tab->map_y-tab->pos_y+(1-dist->stepY)/2)/ dist->rayDirY);
+	dist->heightline = dist->h / dist->perpWallDist;
+	dist->ray_start = (int)(-(dist->perpWallDist / 2) + dist->h / 2);
+	dist->ray_end = (int)((dist->perpWallDist / 2) + dist->h / 2);
+	if (dist->ray_start < 0)
+		dist->ray_start = 0;
+	if (dist->ray_end >= dist->h)
+		dist->ray_end = dist->h - 1;
+}
+
 void		calc_dist_xy(t_map *tab, t_len *dist)
 {
 	if (dist->rayDirX < 0)
@@ -158,6 +173,21 @@ void		calc_dist_xy(t_map *tab, t_len *dist)
 	}
 }
 
+void		ft_init_ray(t_map *tab, t_len *dist)
+{
+	dist->cameraX = (2 * (double)dist->x / (double)dist->w) - 1;
+	dist->planx = cos((tab->angle + 90) * M_PI / 180) * 0.66;
+	dist->plany = sin((tab->angle + 90) * M_PI / 180) * 0.66;
+	dist->rayDirX = cos((tab->angle + (30 * dist->cameraX)) * (M_PI / 180));   // + dist->planx * dist->cameraX;
+	dist->rayDirY = sin((tab->angle + (30 * dist->cameraX)) * (M_PI / 180));   // + dist->plany * dist->cameraX; 
+	dist->deltaDistX = sqrt(1 + (dist->rayDirY * dist->rayDirY) / (dist->rayDirX * dist->rayDirX));
+	dist->deltaDistY = sqrt(1 + (dist->rayDirX * dist->rayDirX) / (dist->rayDirY * dist->rayDirY));
+	dist->hit = 0;
+	tab->map_x = (int)tab->pos_x;
+	tab->map_y = (int)tab->pos_y;
+	
+}
+
 void		calc_dist(t_map *tab, t_len *dist)
 {
 	ft_init_ray(tab, dist);
@@ -179,25 +209,7 @@ void		calc_dist(t_map *tab, t_len *dist)
 		if (tab->map[tab->map_x][tab->map_y] > '0')
 			dist->hit = 1;
 	}
-	if (dist->side == 0)
-		dist->perpWallDist = ((tab->map_x-tab->pos_x+(1-dist->stepX)/2)/ dist->rayDirX);
-	else
-		dist->perpWallDist = ((tab->map_y-tab->pos_y+(1-dist->stepY)/2)/ dist->rayDirY);
-}
-
-void		ft_init_ray(t_map *tab, t_len *dist)
-{
-	dist->hit = 0;
-	dist->cameraX = (2 * dist->x / dist->w) - 1;
-	dist->planx = cos((tab->angle + 90) * M_PI / 180) * 0.66;
-	dist->plany = sin((tab->angle + 90) * M_PI / 180) * 0.66;
-	dist->rayDirX = cos(tab->angle * M_PI / 180) + dist->planx * dist->cameraX;
-	dist->rayDirY = sin(tab->angle * M_PI / 180) + dist->plany * dist->cameraX; 
-	dist->deltaDistX = sqrt(1 + (dist->rayDirY * dist->rayDirY) / (dist->rayDirX * dist->rayDirX));
-	dist->deltaDistY = sqrt(1 + (dist->rayDirX * dist->rayDirX) / (dist->rayDirY * dist->rayDirY));
-	tab->map_x = (int)tab->pos_x;
-	tab->map_y = (int)tab->pos_y;
-	
+	wall_distance(dist, tab);
 }
 
 int		main(int ac, char **av)
@@ -216,14 +228,14 @@ int		main(int ac, char **av)
 	clean_map(tab);
 	position(tab); //Recupere la position de départ et remplace la lettrepar un 0. Initialise l'angle de départ.
 	print_map(tab); 
-	dist->x = 0;
+	dist->x = -1;
 	dist->w = 200;
 	dist->h = 200;
-	while (dist->x <= dist->w)
+	while (++dist->x <= dist->w)
 	{
 		calc_dist(tab, dist);
-		printf("\ndistance == |%f|\n", dist->perpWallDist);
-		dist->x++;
+		display();
+		printf("distance == |%f|\n", dist->perpWallDist);
 	}
 
 }	

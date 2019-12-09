@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 11:18:10 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/09 11:15:20 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/09 13:25:25 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,9 @@ typedef struct	s_len
 	int			x;
 	int			w;
 	int			h;
+	double		heightline;
+	int			ray_start;
+	int			ray_end;
 	double		cameraX;
 	double		perpWallDist;
 	double		rayDirX;

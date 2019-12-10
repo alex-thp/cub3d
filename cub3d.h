@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 11:18:10 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/09 13:25:25 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/10 13:49:42 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct	s_color
 	int			blue;
 	int			green;
 	int			red;
+	int			trans;
 }				t_color;
 
 typedef struct	s_doc
@@ -48,11 +49,10 @@ typedef struct	s_key
 	double		vitRotation;
 	int			avancer;
 	int			reculer;
-	int			tourner;
+	int			tournerG;
+	int			tournerD;
 	int			droite;
 	int			gauche;
-	
-
 }				t_key;
 
 typedef struct	s_len
@@ -82,6 +82,14 @@ typedef struct	s_len
 	int			side;
 }				t_len;
 
+typedef struct	s_libx
+{
+	void	*mlx_ptr;
+	void	*win;
+	void	*img;
+	int		*pix;
+}				t_libx;
+
 typedef struct	s_map
 {
 	int			res_y;
@@ -92,6 +100,11 @@ typedef struct	s_map
 	double		pos_y;
 	int			map_x;
 	int			map_y;
+	int			premierAffichage;
+	t_doc		doc;
+	t_key		key;
+	t_len		len;
+	t_libx		mlx;
 	t_color		floor;
 	t_color		plafond;
 }				t_map;

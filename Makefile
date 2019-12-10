@@ -12,7 +12,11 @@ ft_bzero.c \
 ft_strjoin.c \
 ft_atoi.c \
 ft_putstr_fd.c \
-ft_putchar_fd.c
+ft_putchar_fd.c \
+ft_strchr.c \
+ft_sdupfr.c \
+ft_isdigit.c \
+ft_strlen.c \
 
 GNL_PATH = gnl/
 INC= cub3d.h

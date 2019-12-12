@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 11:18:10 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/10 13:49:42 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/12 03:24:08 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,16 @@ typedef struct	s_key
 	int			tournerD;
 	int			droite;
 	int			gauche;
+	int			sprint;
+	int			respawn;
+	int			fovgod;
 }				t_key;
 
 typedef struct	s_len
-{
+{	
+	double			spawnX;
+	double			spawnY;
+	double			spawnAngle;
 	double 		planx;
 	double 		plany;
 	int			x;

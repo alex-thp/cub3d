@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 16:54:42 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/10 16:34:10 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/12 04:06:59 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,8 +144,10 @@ void	position(t_map *tab)
 					tab->angle = 0;
 				tab->pos_y = y + 0.5;
 				tab->pos_x = x + 0.5;
-				printf("\nMON TYPE = [%c]\n", tab->map[x][y]);
 				tab->map[x][y] = '0';
+				tab->len.spawnX = tab->pos_x;
+				tab->len.spawnY = tab->pos_y;
+				tab->len.spawnAngle = tab->angle;
 			}
 			y++;
 		}
@@ -156,10 +158,11 @@ void	position(t_map *tab)
 void	wall_distance(t_map *tab)
 {
 	if (tab->len.side == 0)
-		tab->len.perpWallDist = fabs(((tab->map_x - tab->pos_x + (1 - tab->len.stepX) / 2) / tab->len.rayDirX));
+		tab->len.perpWallDist = fabs((((double)tab->map_x - tab->pos_x + (1 - tab->len.stepX) / 2) / tab->len.rayDirX));
 	else
-		tab->len.perpWallDist = fabs(((tab->map_y - tab->pos_y + (1 - tab->len.stepY) / 2) / tab->len.rayDirY));
-	tab->len.heightline = abs((int)(tab->len.h / tab->len.perpWallDist));
+		tab->len.perpWallDist = fabs((((double)tab->map_y - tab->pos_y + (1 - tab->len.stepY) / 2) / tab->len.rayDirY));
+	tab->len.heightline = (tab->key.sprint ? abs((int)((double)tab->len.h / tab->len.perpWallDist)) * 1.35 :
+	abs((int)((double)tab->len.h / tab->len.perpWallDist)) * 1.7);
 	tab->len.ray_start = (int)(-(tab->len.heightline / 2) + tab->len.h / 2);
 	tab->len.ray_end = (int)((tab->len.heightline / 2) + tab->len.h / 2);
 	
@@ -195,15 +198,26 @@ void		calc_dist_xy(t_map *tab)
 
 void		ft_init_ray(t_map *tab)
 {
-	// (tab->angle < 0 ? tab->angle += 360 : 0);
-	// (tab->angle > 360 ? tab->angle -= 360 : 0);
+	(tab->angle < 0 ? tab->angle += 360 : 0);
+	(tab->angle > 360 ? tab->angle -= 360 : 0);
 	tab->len.w = tab->res_x;
 	tab->len.h = tab->res_y;
 	tab->len.cameraX = (2 * (double)tab->len.x / (double)tab->len.w) - 1;
-	tab->len.planx = cos((tab->angle + 90) * M_PI / 180) * 0.66;
-	tab->len.plany = sin((tab->angle + 90) * M_PI / 180) * 0.66;
-	tab->len.rayDirX = cos((tab->angle + (30 * tab->len.cameraX)) * (M_PI / 180));   // + tab->len.planx * tab->len.cameraX;
-	tab->len.rayDirY = sin((tab->angle + (30 * tab->len.cameraX)) * (M_PI / 180));   // + tab->len.plany * tab->len.cameraX;
+	if (tab->key.sprint)
+	{
+		tab->len.rayDirX = cos((tab->angle + (40 * tab->len.cameraX)) * (M_PI / 180));
+		tab->len.rayDirY = sin((tab->angle + (40 * tab->len.cameraX)) * (M_PI / 180));
+	}
+	else if (tab->key.fovgod)
+	{
+		tab->len.rayDirX = cos((tab->angle + (180 * tab->len.cameraX)) * (M_PI / 180));
+		tab->len.rayDirY = sin((tab->angle + (180 * tab->len.cameraX)) * (M_PI / 180));
+	}
+	else
+	{
+		tab->len.rayDirX = cos((tab->angle + (30 * tab->len.cameraX)) * (M_PI / 180));
+		tab->len.rayDirY = sin((tab->angle + (30 * tab->len.cameraX)) * (M_PI / 180));
+	}
 	tab->len.deltaDistX = sqrt(1 + (tab->len.rayDirY * tab->len.rayDirY) / (tab->len.rayDirX * tab->len.rayDirX));
 	tab->len.deltaDistY = sqrt(1 + (tab->len.rayDirX * tab->len.rayDirX) / (tab->len.rayDirY * tab->len.rayDirY));
 	tab->len.hit = 0;
@@ -250,67 +264,142 @@ void	ft_init_mlx(t_map *tab)
 void	display_ray(t_map *tab)
 {
 	int i;
-
+	int y; // ajouter des bordures noirs
 	i = -1;
 
-	while (++i < tab->len.ray_start)
-		tab->mlx.pix[i * tab->res_x + tab->len.x] = 0x96ceb4 ;
-	while(++i < (int)tab->len.ray_end)
-		if (tab->len.side == 1)
-			tab->mlx.pix[i * tab->res_x + tab->len.x] = 0xff6f69;
-		else
+	while (++i <= (int)tab->len.ray_start)
+		tab->mlx.pix[i * tab->res_x + tab->len.x] = 0x96ceb4;
+	y = --i + 1; // ajouter des bordures noirs
+	while(++i <= (int)tab->len.ray_end)
+	{
+		if (tab->len.side == 1 && tab->map_y < tab->pos_y)
+			tab->mlx.pix[i * tab->res_x + tab->len.x] = 0xff0000;
+		else if (tab->len.side == 1)
+			tab->mlx.pix[i * tab->res_x + tab->len.x] = 0xbb9b49;
+		if (tab->len.side == 0 && tab->map_x < tab->pos_x)
+			tab->mlx.pix[i * tab->res_x + tab->len.x] = 0x400000;
+		else if (tab->len.side == 0)
 			tab->mlx.pix[i * tab->res_x + tab->len.x] = 0xffcc5c;
+		(i == y ? tab->mlx.pix[i * tab->res_x + tab->len.x] = 0x000000 : 0); // ajouter des bordures noirs
+		(i == tab->len.ray_end ? tab->mlx.pix[i * tab->res_x + tab->len.x] = 0x000000 : 0); // ajouter des bordures noirs
+	}
+	i--;
 	while (++i < tab->res_y)
-		tab->mlx.pix[i * tab->res_x + tab->len.x] = 0x3ABCB1 ;
-
-
-		
+	{
+		tab->mlx.pix[i * tab->res_x + tab->len.x] = 0xffeead;
+	}
 }
 
 void	handle_angle(t_map *tab)
 {
+	if (tab->key.respawn)
+	{
+		tab->pos_x = tab->len.spawnX;
+		tab->pos_y = tab->len.spawnY;
+		tab->angle = tab->len.spawnAngle;
+	}
 	if (tab->key.tournerG)
-		tab->angle -= 2;
+		tab->angle -= 2.5;
 	if (tab->key.tournerD)
-		tab->angle += 2;
+		tab->angle += 2.5;
 }
 
 void	handle_mouv(t_map *tab)
 {
-	tab->key.vitMarche = 2;
+	tab->key.vitMarche = (tab->key.sprint == 1 ? 0.3: 0.15);
 	if (tab->key.avancer)
-		if (tab->map[(int)(tab->pos_x + cos(tab->angle) * tab->key.vitMarche)][(int)tab->pos_y] == 0)
-			tab->pos_x += cos(tab->angle) * tab->key.vitMarche = 2;
+	{
+		if (tab->map[(int)(tab->pos_x + cos(tab->angle * (M_PI / 180)) * tab->key.vitMarche)][(int)tab->pos_y] == '0')
+			tab->pos_x += cos(tab->angle * (M_PI / 180)) * tab->key.vitMarche;
+		if (tab->map[(int)tab->pos_x][(int)(tab->pos_y + sin(tab->angle * (M_PI / 180)) * tab->key.vitMarche)] == '0')
+			tab->pos_y += sin(tab->angle * (M_PI / 180)) * tab->key.vitMarche;
+	}
+	if (tab->key.reculer)
+	{
+		if (tab->map[(int)(tab->pos_x - cos(tab->angle * (M_PI / 180)) * tab->key.vitMarche)][(int)tab->pos_y] == '0')
+			tab->pos_x -= cos(tab->angle * (M_PI / 180)) * tab->key.vitMarche;
+		if (tab->map[(int)tab->pos_x][(int)(tab->pos_y - sin(tab->angle * (M_PI / 180)) * tab->key.vitMarche)] == '0')
+			tab->pos_y -= sin(tab->angle * (M_PI / 180)) * tab->key.vitMarche;
+	}
+	if (tab->key.gauche)
+	{
+		tab->len.planx = cos((tab->angle + 90) * M_PI / 180) * 0.66;
+		if (tab->map[(int)(tab->pos_x - tab->len.planx * tab->key.vitMarche)][(int)tab->pos_y] == '0')
+			tab->pos_x -= tab->len.planx * tab->key.vitMarche;
+		tab->len.plany = sin((tab->angle + 90) * M_PI / 180) * 0.66;
+		if (tab->map[(int)tab->pos_x][(int)(tab->pos_y - tab->len.plany * tab->key.vitMarche)] == '0')
+			tab->pos_y -= tab->len.plany * tab->key.vitMarche;
+	}
+	if (tab->key.droite)
+	{
+		tab->len.planx = cos((tab->angle + 90) * M_PI / 180) * 0.66;
+		if (tab->map[(int)(tab->pos_x + tab->len.planx * tab->key.vitMarche)][(int)tab->pos_y] == '0')
+			tab->pos_x += tab->len.planx * tab->key.vitMarche;
+		tab->len.plany = sin((tab->angle + 90) * M_PI / 180) * 0.66;
+		if (tab->map[(int)tab->pos_x][(int)(tab->pos_y + tab->len.plany * tab->key.vitMarche)] == '0')
+			tab->pos_y += tab->len.plany * tab->key.vitMarche;
+	}
+
 }
 
 int key_press(int keycode, t_map *tab)
 {
-	tab->key.tournerG = (keycode == 123 ? 1 : 0); // fleche gauche rotation gauche
-	tab->key.tournerD = (keycode == 124 ? 1 : 0); // fleche gauche rotation droite
-	tab->key.avancer = (keycode == 13 ? 1 : 0);    // W avancer
-	tab->key.reculer = (keycode == 1 ? 1 : 0);      // S reculer
-	tab->key.gauche = (keycode == 0 ? 1 : 0);      // A aller a gauche
-	tab->key.droite = (keycode == 2 ? 1 : 0);      // D aller a droite
-	handle_angle(tab);
-	// handle_mouv(tab);
+	tab->key.tournerG = (keycode == 123 ? 1 : tab->key.tournerG); // fleche gauche rotation gauche
+	tab->key.tournerD = (keycode == 124 ? 1 : tab->key.tournerD); // fleche gauche rotation droite
+	tab->key.avancer = (keycode == 13 ? 1 : tab->key.avancer);   // W avancer
+	tab->key.reculer = (keycode == 1 ? 1 : tab->key.reculer);    // S reculer
+	tab->key.gauche = (keycode == 0 ? 1 : tab->key.gauche);     // A aller a gauche
+	tab->key.droite = (keycode == 2 ? 1 : tab->key.droite);     // D aller a droite
+	tab->key.sprint = (keycode == 257 ? 1 : tab->key.sprint);     // shift sprint
+	tab->key.respawn = (keycode == 15 ? 1 : tab->key.respawn);     // respawn
+	tab->key.fovgod = (keycode == 3 ? 1 : tab->key.fovgod);     // respawn
 	printf("%d\n", keycode);
+	if (keycode == 53)
+	{
+		mlx_destroy_window(tab->mlx.mlx_ptr, tab->mlx.win);
+		exit(0);
+	}
+	return (0);
+}
+
+int	key_release(int keycode, t_map *tab)
+{
+
+	(keycode == 123 ? tab->key.tournerG-- : 0);
+	(keycode == 124 ? tab->key.tournerD-- : 0);
+	(keycode == 13 ? tab->key.avancer-- : 0);
+	(keycode == 1 ? tab->key.reculer-- : 0);
+	(keycode == 0 ? tab->key.gauche-- : 0);
+	(keycode == 2 ? tab->key.droite-- : 0);
+	(keycode == 257 ? tab->key.sprint-- : 0);
+	(keycode == 15 ? tab->key.respawn-- : 0);
+	(keycode == 3 ? tab->key.fovgod-- : 0);
+	
 	return (0);
 }
 
 int		loop_game(t_map *tab)
 {
 	tab->len.x = -1;
-	if (tab->premierAffichage-- || tab->key.tournerG || tab->key.tournerD
-	|| tab->key.avancer || tab->key.reculer || tab->key.gauche || tab->key.droite)
+	handle_angle(tab);
+	handle_mouv(tab);
+	if (tab->premierAffichage-- == 1 || tab->key.tournerG || tab->key.tournerD
+	|| tab->key.avancer || tab->key.reculer || tab->key.gauche || tab->key.droite
+	|| tab->key.respawn)
 	{
 		while (++tab->len.x <= tab->res_x)
 		{
 			calc_dist(tab);
 			display_ray(tab);
-			if (tab->len.x == tab->res_x / 2)
-				printf("distance[%d] == |%f|\n", tab->len.x, tab->len.perpWallDist);
+			// if (tab->len.x == tab->res_x / 2)
+			// {
+				// printf("rayDirX = %f", tab->len.rayDirX);	
+				// printf("angle = |%f|", tab->angle);
+				// printf("distance[%d] == |%f|\n", tab->len.x, tab->len.perpWallDist);
+			// }
 		}
 		mlx_put_image_to_window(tab->mlx.mlx_ptr, tab->mlx.win, tab->mlx.img, 0, 0);
+
 	}
 	return (0);
 }
@@ -331,6 +420,7 @@ int		main(int ac, char **av)
 	position(tab);
 	ft_init_mlx(tab);
 	mlx_hook (tab->mlx.win, 2, 0, key_press, tab);
+	mlx_hook (tab->mlx.win, 3, 0, key_release, tab);
 	mlx_loop_hook (tab->mlx.mlx_ptr, loop_game, tab);
 	mlx_loop(tab->mlx.mlx_ptr);
 	return (0);

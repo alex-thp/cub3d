@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 11:18:10 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/12 03:24:08 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/12 04:19:46 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,22 @@ typedef struct	s_map
 	t_color		floor;
 	t_color		plafond;
 }				t_map;
+
+void	parse_map(char **av, t_map	*tab);
+char	*clean_str(char *str);
+void	ft_perfect_parse(t_map *tab);
+void	clean_map(t_map *tab);
+void	position(t_map *tab);
+void	wall_distance(t_map *tab);
+void	ft_init_ray(t_map *tab);
+void	calc_dist_xy(t_map *tab);
+void	calc_dist(t_map *tab);
+void	ft_init_mlx(t_map *tab);
+void	display_ray(t_map *tab);
+void	handle_angle(t_map *tab);
+void	handle_mouv(t_map *tab);
+int		key_release(int keycode, t_map *tab);
+int 	key_press(int keycode, t_map *tab);
+int		loop_game(t_map *tab);
 
 #endif

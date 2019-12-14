@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 04:24:48 by thverney          #+#    #+#             */
-/*   Updated: 2019/12/12 04:25:39 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/14 09:08:34 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,22 @@ void		calc_dist(t_map *tab)
 		if (tab->map[tab->map_x][tab->map_y] > '0')
 			tab->len.hit = 1;
 	}
+	if (tab->len.side == 1)
+	{
+		tab->len.wallX = (double)((double)tab->pos_x + (((double)tab->map_y - tab->pos_y + (1
+		- (double)tab->len.stepY) / 2) / tab->len.rayDirY) * tab->len.rayDirX);
+	}
+	else
+	{
+		tab->len.wallX = (double)((double)tab->pos_y + (((double)tab->map_x - tab->pos_x + (1
+		- (double)tab->len.stepX) / 2) / tab->len.rayDirX) * tab->len.rayDirY);
+	}
+	tab->len.wallX -= (int)tab->len.wallX;   
+	tab->len.textX = (int)(tab->len.wallX * 64);
+	if (tab->len.side == 0 && tab->len.rayDirX > 0)
+		tab->len.textX = 64 - tab->len.textX - 1;
+	if (tab->len.side == 1 && tab->len.rayDirY < 0)
+		tab->len.textX = 64 - tab->len.textX - 1;
+
 	wall_distance(tab);
 }

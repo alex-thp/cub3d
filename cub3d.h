@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 11:18:10 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/12 04:19:46 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/14 08:45:34 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ typedef struct	s_color
 	int			green;
 	int			red;
 	int			trans;
+	char		*text;
 }				t_color;
+
 
 typedef struct	s_doc
 {
@@ -41,6 +43,7 @@ typedef struct	s_doc
 	char		*F;
 	char		*C;
 	char		*map;
+
 }				t_doc;
 
 typedef struct	s_key
@@ -57,6 +60,28 @@ typedef struct	s_key
 	int			respawn;
 	int			fovgod;
 }				t_key;
+
+typedef struct	s_text
+{
+	int			width;
+	int			height;
+	void		*img;
+	int			*pix;
+	int			bpp;
+	int			size;
+	int			endian;
+
+}				t_text;
+
+typedef struct	s_libx
+{
+	void	*mlx_ptr;
+	void	*win;
+	void	*img;
+	void	*img_floor;
+	void	*img_sky;
+	int		*pix;
+}				t_libx;
 
 typedef struct	s_len
 {	
@@ -86,15 +111,11 @@ typedef struct	s_len
 	double		sideDistX;
 	double		sideDistY;
 	int			side;
+	double		wallX;
+	int 		textX;
+	double 		textY;
 }				t_len;
 
-typedef struct	s_libx
-{
-	void	*mlx_ptr;
-	void	*win;
-	void	*img;
-	int		*pix;
-}				t_libx;
 
 typedef struct	s_map
 {
@@ -111,8 +132,10 @@ typedef struct	s_map
 	t_key		key;
 	t_len		len;
 	t_libx		mlx;
-	t_color		floor;
-	t_color		plafond;
+	t_text 		dst_N;
+	t_text 		dst_S;
+	t_text 		dst_W;
+	t_text 		dst_E;
 }				t_map;
 
 void	parse_map(char **av, t_map	*tab);
@@ -131,5 +154,6 @@ void	handle_mouv(t_map *tab);
 int		key_release(int keycode, t_map *tab);
 int 	key_press(int keycode, t_map *tab);
 int		loop_game(t_map *tab);
-
+int 	*texture_resize(t_map *tab, t_text *src, int	width, int height);
+void	get_texture(t_map *tab);
 #endif

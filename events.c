@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 04:27:49 by thverney          #+#    #+#             */
-/*   Updated: 2019/12/12 04:29:38 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/13 07:24:25 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,15 @@ void	handle_angle(t_map *tab)
 		tab->angle = tab->len.spawnAngle;
 	}
 	if (tab->key.tournerG)
-		tab->angle -= 2.5;
+		tab->angle -= (tab->key.fovgod == 1 ? 5 : 2.5);
 	if (tab->key.tournerD)
-		tab->angle += 2.5;
+		tab->angle += (tab->key.fovgod == 1 ? 5 : 2.5);
 }
 
 void	handle_mouv(t_map *tab)
 {
 	tab->key.vitMarche = (tab->key.sprint == 1 ? 0.3: 0.15);
+	tab->key.vitMarche = (tab->key.fovgod == 1 ? 0.4 : tab->key.vitMarche);
 	if (tab->key.avancer)
 	{
 		if (tab->map[(int)(tab->pos_x + cos(tab->angle * (M_PI / 180)) * tab->key.vitMarche)][(int)tab->pos_y] == '0')

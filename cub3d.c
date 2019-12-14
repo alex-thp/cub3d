@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/02 16:54:42 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/12 04:29:06 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/14 09:01:29 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,14 @@ int		loop_game(t_map *tab)
 		{
 			calc_dist(tab);
 			display_ray(tab);
+
+			if (tab->len.x == tab->res_x /2)
+			{
+				// printf("\ntab->len.wallX = %f\n",tab->len.wallX);
+				// printf("\nresYY = %d\n",tab->res_y);				
+				printf("\nH = %d et W = %d\n", tab->dst_N.height, tab->dst_N.width);
+				printf("\nresX %d et resY %d\n", tab->res_x, tab->res_y);
+			}
 		}
 		mlx_put_image_to_window(tab->mlx.mlx_ptr, tab->mlx.win, tab->mlx.img, 0, 0);
 

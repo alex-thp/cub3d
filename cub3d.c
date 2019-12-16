@@ -47,13 +47,13 @@ int		main(int ac, char **av)
 		return (-1);
 	parse_map(av, tab);
 	position(tab);
-	printf("\nres_x = |%d|\n", tab->res_x);
-	printf("\nres_y = |%d|\n", tab->res_y);
-	printf("\ntexture Nord = |%s|\n", tab->doc.NO);
-	printf("\ntexture  Sud = |%s|\n", tab->doc.SO);
-	printf("\ntexture West = |%s|\n", tab->doc.WE);
-	printf("\ntexture  Est = |%s|\n", tab->doc.EA);
-	printf("\ntextu Sprite = |%s|\n", tab->doc.S);
+	// printf("\nres_x = |%d|\n", tab->res_x);
+	// printf("\nres_y = |%d|\n", tab->res_y);
+	// printf("\ntexture Nord = |%s|\n", tab->doc.NO);
+	// printf("\ntexture  Sud = |%s|\n", tab->doc.SO);
+	// printf("\ntexture West = |%s|\n", tab->doc.WE);
+	// printf("\ntexture  Est = |%s|\n", tab->doc.EA);
+	// printf("\ntextu Sprite = |%s|\n", tab->doc.S);
 	// printf("\ntextur Floor = |%d|\n", tab->doc.F.red);
 	// printf("\ntextur Floor = |%d|\n", tab->doc.F.green);
 	// printf("\ntextur Floor = |%d|\n", tab->doc.F.blue);
@@ -71,10 +71,10 @@ int		main(int ac, char **av)
 	// 	i++;
 	// }
 
-	// ft_init_mlx(tab);
-	// mlx_hook (tab->mlx.win, 2, 0, key_press, tab);
-	// mlx_hook (tab->mlx.win, 3, 0, key_release, tab);
-	// mlx_loop_hook (tab->mlx.mlx_ptr, loop_game, tab);
-	// mlx_loop(tab->mlx.mlx_ptr);
+	ft_init_mlx(tab);
+	mlx_hook (tab->mlx.win, 2, 0, key_press, tab);
+	mlx_hook (tab->mlx.win, 3, 0, key_release, tab);
+	mlx_loop_hook (tab->mlx.mlx_ptr, loop_game, tab);
+	mlx_loop(tab->mlx.mlx_ptr);
 	return (0);
 }

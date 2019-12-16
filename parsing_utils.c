@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 12:29:47 by thverney          #+#    #+#             */
-/*   Updated: 2019/12/16 17:02:16 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/16 21:08:45 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,33 +103,38 @@ void	ft_error(int error, t_map *tab)
 {
 	if (error == 1)
 	{
-		write(1, "\n(ERROR!) Invalid Resolution [Error 1]\n", 40);
+		write(1, "\n\033[31m(ERROR!) Invalid Resolution\n", 35);
 		tab->error = 1;
 	}
 	if (error == 2)
 	{
-		write(1, "\n(ERROR!) Invalid Map, illegal character(s) [Error 2]\n", 55);
+		write(1, "\n\033[31m(ERROR!) Invalid Map, illegal characters\n", 48);
 		tab->error = 1;
 	}
 	if (error == 3)
 	{
-		write(1, "\n(ERROR) Invalid Map, Map must be closed by '1' [Error 3]\n", 59);
+		write(1, "\n\033[31m(ERROR) Map isn't surrounded by '1'\n", 43);
 		tab->error = 1;
 	}
 
 	if (error == 4)
 	{
-		write(1, "\n(ERROR) Invalid Path texture [Error 4]\n", 41);
+		write(1, "\n\033[31m(ERROR) Invalid Path texture\n", 36);
 		tab->error = 1;
 	}	
 	if (error == 5)
 	{
-		write(1, "\n(ERROR) Path(s) not found [Error 5]\n", 38);
+		write(1, "\n\033[31m(ERROR) Path(s) not found\n", 33);
 		tab->error = 1;
 	}
 	if (error == 6)
 	{
-		write(1, "\n(ERROR) Illegal RGB value(s) [Error 6]\n", 41);
+		write(1, "\n\033[31m(ERROR) Illegal RGB value(s)\n", 36);
+		tab->error = 1;
+	}
+	if (error == 7)
+	{
+		write(1, "\n\033[31m(ERROR) Map isn't rectangular\n", 37);
 		tab->error = 1;
 	}
 	

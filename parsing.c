@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 04:13:10 by thverney          #+#    #+#             */
-/*   Updated: 2019/12/16 16:42:10 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/16 22:14:24 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,12 @@ void	doc_checker(char *str, t_map *tab)
 
 	if (str[0] == '0')
 		ft_error(3, tab);
-	if (str[0] == '1')
+	if (str[0] == '1' || (str[0] == ' ' && ft_strchr(str, '1') != NULL))
 	{
 		tab->doc.map = ft_strjoin_gnl(tab->doc.map, str, 2147483647);
 		tab->doc.map = ft_strjoin_gnl(tab->doc.map, ".", 2147483647);
 	}
-}
+}///// check error
 
 void	parse_map(char **av, t_map	*tab)
 {
@@ -84,13 +84,16 @@ void	parse_map(char **av, t_map	*tab)
 	{
 		i = get_next_line(fd, &tab->doc.temp);
 		doc_checker(tab->doc.temp, tab);
+		// if (i == 0)
+		// 	ft_map_check(tab, -1);
 	}
 	doc_way(".", tab, 5);
 	tab->map = ft_split(tab->doc.map, '.');
+	tab->tmp_err = 0;
 	clean_map(tab);
 	(tab->tmp_err > 1 ? ft_error(2, tab) : 0);
+	ft_map_check(tab, 0);
 }
-
 
 void	position(t_map *tab)
 {

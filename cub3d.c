@@ -40,13 +40,15 @@ int		loop_game(t_map *tab)
 int		main(int ac, char **av)
 {
 	t_map	*tab;
-	int i;
-
+	
 	(void)ac;
+	// int i;
 	if (!(tab = (t_map*)malloc(sizeof(t_map))))
 		return (-1);
 	parse_map(av, tab);
-	position(tab);
+	ft_exit_error(tab);
+	// printf("\nF  =|%d|\n", tab->doc.F.hex);
+	// printf("\nC  =|%d|\n", tab->doc.C.hex);
 	// printf("\nres_x = |%d|\n", tab->res_x);
 	// printf("\nres_y = |%d|\n", tab->res_y);
 	// printf("\ntexture Nord = |%s|\n", tab->doc.NO);
@@ -63,14 +65,13 @@ int		main(int ac, char **av)
 	// printf("\ntext Cealing = |%d|\n", tab->doc.C.blue);
 	// printf("\ntext Cealing = |%d|\n", tab->doc.C.trans);
 	// printf("\nerror        = |%d|\n", tab->error);
-	i = 0;
+	// i = 0;
 
 	// while (tab->map[i])
 	// {
-	// 	printf("\n|%s|\n", tab->map[i]);
-	// 	i++;
+		// printf("\n|%s|\n", tab->map[i]);
+		// i++;
 	// }
-
 	ft_init_mlx(tab);
 	mlx_hook (tab->mlx.win, 2, 0, key_press, tab);
 	mlx_hook (tab->mlx.win, 3, 0, key_release, tab);

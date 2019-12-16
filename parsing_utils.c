@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 12:29:47 by thverney          #+#    #+#             */
-/*   Updated: 2019/12/16 21:08:45 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/17 00:44:24 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	doc_color_F(char *str, t_map *tab)
 	|| tab->doc.F.red < 0 || tab->doc.F.red > 255
 	|| tab->doc.F.green < 0 || tab->doc.F.green > 255 ? ft_error(6, tab) : 0);
 	tab->doc.F.trans = 0;
+	ft_put_in_hex(tab, 0);
 }
 
 void	doc_color_C(char *str, t_map *tab)
@@ -97,45 +98,25 @@ void	doc_color_C(char *str, t_map *tab)
 	|| tab->doc.C.red < 0 || tab->doc.C.red > 255
 	|| tab->doc.C.green < 0 || tab->doc.C.green > 255 ? ft_error(6, tab) : 0);
 	tab->doc.C.trans = 0;
+	ft_put_in_hex(tab, 1);
 }
 
 void	ft_error(int error, t_map *tab)
 {
 	if (error == 1)
-	{
 		write(1, "\n\033[31m(ERROR!) Invalid Resolution\n", 35);
-		tab->error = 1;
-	}
 	if (error == 2)
-	{
 		write(1, "\n\033[31m(ERROR!) Invalid Map, illegal characters\n", 48);
-		tab->error = 1;
-	}
 	if (error == 3)
-	{
 		write(1, "\n\033[31m(ERROR) Map isn't surrounded by '1'\n", 43);
-		tab->error = 1;
-	}
-
 	if (error == 4)
-	{
-		write(1, "\n\033[31m(ERROR) Invalid Path texture\n", 36);
-		tab->error = 1;
-	}	
+		write(1, "\n\033[31m(ERROR) Invalid Path texture\n", 36);	
 	if (error == 5)
-	{
 		write(1, "\n\033[31m(ERROR) Path(s) not found\n", 33);
-		tab->error = 1;
-	}
 	if (error == 6)
-	{
 		write(1, "\n\033[31m(ERROR) Illegal RGB value(s)\n", 36);
-		tab->error = 1;
-	}
 	if (error == 7)
-	{
 		write(1, "\n\033[31m(ERROR) Map isn't rectangular\n", 37);
-		tab->error = 1;
-	}
+	tab->error = 1;
 	
 }

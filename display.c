@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 04:26:19 by thverney          #+#    #+#             */
-/*   Updated: 2019/12/16 11:04:37 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/17 00:50:26 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,17 @@ void	display_ray(t_map *tab)
 
 
 	while (++i <= (int)tab->len.ray_start)
-		tab->mlx.pix[i * tab->res_x + tab->len.x] = 0x96ceb4;
+		tab->mlx.pix[i * tab->res_x + tab->len.x] = tab->doc.C.hex;
 	y = --i + 1; // ajouter des bordures noirs
 	while(++i <= (int)tab->len.ray_end)
 	{
-		// tab->len.textY = (((double)i * 2. - (double)tab->res_y + (double)tab->len.heightline) * (tab->res_y  / 2) / (double)tab->len.heightline);
-		// if (tab->len.side == 1 && tab->map_y < tab->pos_y)
-		// {
-			// tab->mlx.pix[i * tab->res_x + tab->len.x] = tab->dst_N.pix[(int)tab->len.textY * tab->res_y  + tab->len.textX]; //0xff000000;
-		// }
 		tab->len.textY = (((double)i * 2. - (double)tab->res_y + (double)tab->len.heightline) * (tab->dst_N.width/ 2) / (double)tab->len.heightline);
 		if (tab->len.side == 1 && tab->map_y < tab->pos_y)
 		{
 			tab->mlx.pix[i * tab->res_x + tab->len.x] = tab->dst_N.pix[(int)tab->len.textY * tab->dst_N.width + tab->len.textXN]; //0xff000000;
 		}
-		// else
 		else if (tab->len.side == 1)
 		{
-			// tab->mlx.pix[i * tab->res_x + tab->len.x] = 0x0f0f00;
 			tab->len.textY = (((double)i * 2. - (double)tab->res_y + (double)tab->len.heightline) * (tab->dst_S.width/ 2) / (double)tab->len.heightline);
 			tab->mlx.pix[i * tab->res_x + tab->len.x] = tab->dst_S.pix[(int)tab->len.textY * tab->dst_S.width + tab->len.textXS]; //0xff000000;
 		}
@@ -70,6 +63,6 @@ void	display_ray(t_map *tab)
 	i--;
 	while (++i < tab->res_y)
 	{
-		tab->mlx.pix[i * tab->res_x + tab->len.x] = 0xffeead;
+		tab->mlx.pix[i * tab->res_x + tab->len.x] = tab->doc.F.hex;
 	}
 }

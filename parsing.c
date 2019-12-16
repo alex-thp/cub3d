@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 04:13:10 by thverney          #+#    #+#             */
-/*   Updated: 2019/12/16 22:14:24 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/17 00:35:28 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,16 @@ void	parse_map(char **av, t_map	*tab)
 	{
 		i = get_next_line(fd, &tab->doc.temp);
 		doc_checker(tab->doc.temp, tab);
-		// if (i == 0)
-		// 	ft_map_check(tab, -1);
+		if (i == 0)
+			splitmap(tab->doc.temp, -1, 0, tab);
 	}
 	doc_way(".", tab, 5);
 	tab->map = ft_split(tab->doc.map, '.');
 	tab->tmp_err = 0;
 	clean_map(tab);
 	(tab->tmp_err > 1 ? ft_error(2, tab) : 0);
-	ft_map_check(tab, 0);
+	ft_map_check(tab);
+	position(tab);
 }
 
 void	position(t_map *tab)

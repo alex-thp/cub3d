@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 11:18:10 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/16 21:36:05 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/16 23:36:03 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct	s_color
 	int			green;
 	int			red;
 	int			trans;
-	char		*text;
+	int			hex;
 }				t_color;
 
 
@@ -171,6 +171,8 @@ void	doc_color_F(char *str, t_map *tab);
 void	doc_color_C(char *str, t_map *tab);
 void	ft_error(int error, t_map *tab);
 void	doc_way_fd(t_map *tab, int way);
-void	ft_map_check(t_map *tab, int indic);
-int 	splitmap(char *str, int i, int len);
+void	ft_map_check(t_map *tab);
+int 	splitmap(char *str, int i, int len, t_map *tab);
+void	ft_exit_error(t_map *tab);
+void	ft_put_in_hex(t_map *tab, int i);
 #endif

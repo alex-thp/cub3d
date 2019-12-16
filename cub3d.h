@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 11:18:10 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/14 08:45:34 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/16 16:18:51 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,22 @@ typedef struct	s_doc
 	char		*WE;
 	char		*EA;
 	char		*S;
-	char		*F;
-	char		*C;
+	t_color		F;
+	t_color		C;
 	char		*map;
+	char		*temp;
 
 }				t_doc;
 
 typedef struct	s_key
 {
-	double		vitMarche;
-	double		vitRotation;
-	int			avancer;
-	int			reculer;
-	int			tournerG;
-	int			tournerD;
-	int			droite;
-	int			gauche;
+	double		speed;
+	int			front;
+	int			back;
+	int			rotL;
+	int			rotR;
+	int			moveR;
+	int			moveL;
 	int			sprint;
 	int			respawn;
 	int			fovgod;
@@ -70,6 +70,7 @@ typedef struct	s_text
 	int			bpp;
 	int			size;
 	int			endian;
+	int			smallval;
 
 }				t_text;
 
@@ -112,7 +113,10 @@ typedef struct	s_len
 	double		sideDistY;
 	int			side;
 	double		wallX;
-	int 		textX;
+	int 		textXN;
+	int 		textXS;
+	int 		textXW;
+	int 		textXE;
 	double 		textY;
 }				t_len;
 
@@ -128,6 +132,8 @@ typedef struct	s_map
 	int			map_x;
 	int			map_y;
 	int			premierAffichage;
+	int			error;
+	int			tmp_err;
 	t_doc		doc;
 	t_key		key;
 	t_len		len;
@@ -139,8 +145,6 @@ typedef struct	s_map
 }				t_map;
 
 void	parse_map(char **av, t_map	*tab);
-char	*clean_str(char *str);
-void	ft_perfect_parse(t_map *tab);
 void	clean_map(t_map *tab);
 void	position(t_map *tab);
 void	wall_distance(t_map *tab);
@@ -150,10 +154,21 @@ void	calc_dist(t_map *tab);
 void	ft_init_mlx(t_map *tab);
 void	display_ray(t_map *tab);
 void	handle_angle(t_map *tab);
-void	handle_mouv(t_map *tab);
+void	handle_move(t_map *tab);
+void	back_front(t_map *tab);
+void	left_right(t_map *tab);
 int		key_release(int keycode, t_map *tab);
 int 	key_press(int keycode, t_map *tab);
 int		loop_game(t_map *tab);
 int 	*texture_resize(t_map *tab, t_text *src, int	width, int height);
 void	get_texture(t_map *tab);
+int		is_loopable(t_map *tab);
+void	get_texture_X(t_map *tab);
+void	doc_checker(char *str, t_map *tab);
+void	doc_resolution(char *str, t_map *tab);
+void	doc_way(char *str, t_map *tab, int way);
+void	doc_color_F(char *str, t_map *tab);
+void	doc_color_C(char *str, t_map *tab);
+void	ft_error(int error, t_map *tab);
+void	doc_way_fd(t_map *tab, int way);
 #endif

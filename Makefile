@@ -1,7 +1,7 @@
-CFLAGS =-Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra
 NAME = Cub3D
 
-SRC_FILE = cub3d.c parsing.c distance.c events.c display.c texture.c
+SRC_FILE = cub3d.c parsing.c distance.c events.c display.c texture.c ft_utils.c parsing_utils.c parsing_utils_2.c
 GNL_FILE = get_next_line.c get_next_line_utils.c
 
 LIB_PATH = libft/
@@ -28,11 +28,11 @@ LIB = minilibx/
 all: ${NAME}
 
 $(NAME): ${OBJS} ${INC}
-	@gcc ${FLAGS} -I include -g -l mlx ${FRAMEWORK} ${OBJS} -o ${NAME}
+	@gcc ${CFLAGS} -I include -g -l mlx ${FRAMEWORK} ${OBJS} -o ${NAME}
 
 %.o : %.c
 	@echo Compiling $<
-	gcc $(FLAGS) -c -I include/ $< -o $@
+	gcc $(CFLAGS) -c -I include/ $< -o $@
 
 clean:
 	rm -f ${OBJS} ${BONUS}

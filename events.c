@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 04:27:49 by thverney          #+#    #+#             */
-/*   Updated: 2019/12/14 15:32:59 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/17 01:37:44 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	handle_move(t_map *tab)
 {
-	tab->key.speed = (tab->key.sprint == 1 ? 0.3 : 0.15);
+	tab->key.speed = (tab->key.sprint == 1 ? 1 : 0.15);
 	tab->key.speed = (tab->key.fovgod == 1 ? 0.4 : tab->key.speed);
 	if (tab->key.respawn)
 	{

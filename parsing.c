@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 04:13:10 by thverney          #+#    #+#             */
-/*   Updated: 2019/12/17 00:35:28 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/17 05:04:54 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,15 @@ void	clean_map(t_map *tab)
 			if (tab->map[k][i] != 32)
 			{
 				res[j++] = tab->map[k][i];
-				(res[j - 1] != '1' && res[j - 1] != '0' ? tab->tmp_err++ : 0);
+				(res[j - 1] != '1' && res[j - 1] != '0' && res[j - 1] != '2' 
+				? tab->tmp_err++ : 0);
 			}
 		}
 		res[j] = 0;
 		free(tab->map[k]);
 		tab->map[k] = res;
 	}
-}///// check error
+}
 
 void	doc_checker(char *str, t_map *tab)
 {
@@ -66,7 +67,7 @@ void	doc_checker(char *str, t_map *tab)
 		tab->doc.map = ft_strjoin_gnl(tab->doc.map, str, 2147483647);
 		tab->doc.map = ft_strjoin_gnl(tab->doc.map, ".", 2147483647);
 	}
-}///// check error
+}
 
 void	parse_map(char **av, t_map	*tab)
 {

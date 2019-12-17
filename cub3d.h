@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 11:18:10 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/16 23:36:03 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/17 08:33:00 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ typedef struct	s_len
 	int 		textXS;
 	int 		textXW;
 	int 		textXE;
+	int 		textXSP;
 	double 		textY;
 }				t_len;
 
@@ -140,6 +141,7 @@ typedef struct	s_map
 	t_libx		mlx;
 	t_text 		dst_N;
 	t_text 		dst_S;
+	t_text 		dst_SP;
 	t_text 		dst_W;
 	t_text 		dst_E;
 }				t_map;
@@ -175,4 +177,6 @@ void	ft_map_check(t_map *tab);
 int 	splitmap(char *str, int i, int len, t_map *tab);
 void	ft_exit_error(t_map *tab);
 void	ft_put_in_hex(t_map *tab, int i);
+void	display_ray_gun(t_map *tab);
+void	display_sprites(t_map *tab);
 #endif

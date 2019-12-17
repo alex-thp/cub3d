@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 12:29:47 by thverney          #+#    #+#             */
-/*   Updated: 2019/12/17 00:44:24 by thverney         ###   ########.fr       */
+/*   Updated: 2019/12/17 01:05:11 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ void	ft_error(int error, t_map *tab)
 		write(1, "\n\033[31m(ERROR) Illegal RGB value(s)\n", 36);
 	if (error == 7)
 		write(1, "\n\033[31m(ERROR) Map isn't rectangular\n", 37);
+	if (error == 8)
+		write(1, "\n\033[31m(ERROR) Too many arguments !!\n", 37);
 	tab->error = 1;
 	
 }

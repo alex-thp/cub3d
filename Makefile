@@ -1,7 +1,7 @@
 CFLAGS = -Wall -Werror -Wextra
 NAME = Cub3D
 
-SRC_FILE = cub3d.c parsing.c distance.c events.c display.c texture.c ft_utils.c parsing_utils.c parsing_utils_2.c
+SRC_FILE = cub3d.c parsing.c distance.c events.c display.c texture.c ft_utils.c parsing_utils.c parsing_utils_2.c display_more.c
 GNL_FILE = get_next_line.c get_next_line_utils.c
 
 LIB_PATH = libft/

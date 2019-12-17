@@ -22,15 +22,16 @@ int		loop_game(t_map *tab)
 		{
 			calc_dist(tab);
 			display_ray(tab);
-
-	// 		if (tab->len.x == tab->res_x /2)
-	// 		{
-	// 			// printf("\ntab->len.wallX = %f\n",tab->len.wallX);
-	// 			// printf("\nresYY = %d\n",tab->res_y);				
+			display_ray_gun(tab);
+			// if (tab->len.x == tab->res_x /2)
+			// {
+				// printf("\ntab->len.wallX = %f\n",tab->len.wallX);
+	// 		
+				// printf("\nresYY = %d\n",tab->res_y);				
 	// 			// printf("\nH = %d et W = %d\n", tab->dst_N.height, tab->dst_N.width);
 	// 			// printf("\nH %d W %d\n", tab->dst_S.height, tab->dst_S.width);
-	// 			// printf("\nresX %d et resY %d\n", tab->res_x, tab->res_y);
-	// 		}
+				// printf("\nresX %d et resY %d\n", tab->res_x, tab->res_y);
+			// }
 		}
 		mlx_put_image_to_window(tab->mlx.mlx_ptr, tab->mlx.win, tab->mlx.img, 0, 0);
 	}
@@ -41,10 +42,14 @@ int		main(int ac, char **av)
 {
 	t_map	*tab;
 	
-	(void)ac;
 	// int i;
 	if (!(tab = (t_map*)malloc(sizeof(t_map))))
 		return (-1);
+	if (ac != 2)
+	{
+		ft_error(8, tab);
+		return (0);
+	}
 	parse_map(av, tab);
 	ft_exit_error(tab);
 	// printf("\nF  =|%d|\n", tab->doc.F.hex);

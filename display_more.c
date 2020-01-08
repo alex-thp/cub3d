@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 01:11:58 by thverney          #+#    #+#             */
-/*   Updated: 2020/01/08 14:34:51 by thverney         ###   ########.fr       */
+/*   Updated: 2020/01/08 19:54:20 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	display_ray_gun(t_map *tab)
 {
 	int j;
 
-	display_sprites(tab);
 	j = tab->res_y / 2 - 25;
 	if (tab->len.x >= (tab->res_x / 2) - 1 && tab->len.x <= (tab->res_x / 2) + 1)
 	{
@@ -37,47 +36,48 @@ void	display_ray_gun(t_map *tab)
 	}
 }
 
+t_sprite	*sort_sprites(t_sprite *copy)
+{
+	t_sprite *tmp;
+	t_sprite *pre;
+
+	pre = NULL;
+	tmp = copy;
+	while (tmp->next != NULL)
+	{
+		if (tmp->dist > tmp->next->dist)
+		{
+			pre ? pre->next = tmp->next : 0;
+			!pre ? copy = tmp->next : 0;
+			tmp->next = tmp->next->next;
+			pre->next->next = tmp;
+		}
+		else
+		{
+			pre = tmp;
+			tmp = tmp->next;
+		}
+	}
+	return (copy);
+
+}
+
 void	display_sprites(t_map *tab)
 {
 	int i;
-	
+	t_sprite *tmp;
+
+	tmp = tab->sp;
 	i = -1;
-	if (tab->map[tab->map_x][tab->map_y] == '2')
+	while (++i < tab->len.nbSP)
 	{
-		tab->len.textXSP = (int)(tab->len.wallX * tab->dst_SP.width);
-		while (++i <= (int)tab->len.ray_start)
-		{
-			tab->mlx.pix[i * tab->res_x + tab->len.x] = tab->doc.C.hex;
-		}
-		while(++i <= (int)tab->len.ray_end)
-		{
-			tab->len.textY = (((double)i * 2. - (double)tab->res_y + (double)tab->len.heightline) * (tab->dst_SP.width/ 2) / (double)tab->len.heightline);
-			// if (tab->len.side == 1 && tab->map_y < tab->pos_y)
-			tab->mlx.pix[i * tab->res_x + tab->len.x] = tab->dst_SP.pix[(int)tab->len.textY * tab->dst_SP.width + tab->len.textXSP];
-			// else if (tab->len.side == 1)
-			// {
-			// 	tab->len.textY = (((double)i * 2. - (double)tab->res_y + (double)tab->len.heightline) * (tab->dst_SP.width/ 2) / (double)tab->len.heightline);
-			// 	tab->mlx.pix[i * tab->res_x + tab->len.x] = tab->dst_SP.pix[(int)tab->len.textY * tab->dst_SP.width + tab->len.textXSP]; //0xff000000;
-			// }
-			// if (tab->len.side == 0 && tab->map_x < tab->pos_x)
-			// {
-			// 	tab->len.textY = (((double)i * 2. - (double)tab->res_y + (double)tab->len.heightline) * (tab->dst_SP.width/ 2) / (double)tab->len.heightline);
-			// 	tab->mlx.pix[i * tab->res_x + tab->len.x] = tab->dst_SP.pix[(int)tab->len.textY * tab->dst_SP.width + tab->len.textXSP]; //0xff000000;
-			// }
-			// else if (tab->len.side == 0)
-			// {
-			// 	tab->len.textY = (((double)i * 2. - (double)tab->res_y + (double)tab->len.heightline) * (tab->dst_SP.width/ 2) / (double)tab->len.heightline);
-			// 	tab->mlx.pix[i * tab->res_x + tab->len.x] = tab->dst_SP.pix[(int)tab->len.textY * tab->dst_SP.width + tab->len.textXSP]; //0xff000000;
-			// }
-		}
-		i--;
-		while (++i < tab->res_y)
-		{
-			tab->mlx.pix[i * tab->res_x + tab->len.x] = tab->doc.F.hex;
-		}
+		tmp->dist = ((tab->pos_x - tmp->x) *
+		(tab->pos_x - tmp->x) + (tab->pos_y - tmp->y) *
+		(tab->pos_y - tmp->y));
+		tmp = tmp->next;
 	}
-	else
-		return ;
+	tab->sp = sort_sprites(tmp);
+	print_sprite(tab);
 }
 
 void	print_sprite(t_map *tab)

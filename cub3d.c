@@ -18,7 +18,7 @@ int		loop_game(t_map *tab)
 	handle_move(tab);
 	if (is_loopable(tab))
 	{
-		while (++tab->len.x <= tab->res_x)
+		while (++tab->len.x < tab->res_x)
 		{
 			calc_dist(tab);
 			display_ray(tab);
@@ -33,6 +33,7 @@ int		loop_game(t_map *tab)
 			// 	printf("\nresX %d et resY %d\n", tab->res_x, tab->res_y);
 			// }
 		}
+		// display_sprites(tab);
 		mlx_put_image_to_window(tab->mlx.mlx_ptr, tab->mlx.win, tab->mlx.img, 0, 0);
 	}
 	return (0);

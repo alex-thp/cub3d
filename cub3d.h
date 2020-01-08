@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 11:18:10 by ade-temm          #+#    #+#             */
-/*   Updated: 2019/12/18 04:04:07 by thverney         ###   ########.fr       */
+/*   Updated: 2020/01/08 19:54:19 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,9 @@ typedef struct	s_sprite
 {
 	double 		x;
 	double 		y;
-	int			dist;
+	double		dist;
 	struct s_sprite	*next;
 }				t_sprite;
-
 
 typedef struct	s_color
 {
@@ -128,6 +127,8 @@ typedef struct	s_len
 	int 		textXE;
 	int 		textXSP;
 	double 		textY;
+	double		*ZBuffer;
+	int			nbSP;
 }				t_len;
 
 
@@ -191,4 +192,5 @@ void	display_ray_gun(t_map *tab);
 void	display_sprites(t_map *tab);
 void	ft_sprites_stock(double x, double y, t_map *tab);
 void	print_sprite(t_map *tab);
+void	display_sprites(t_map *tab);
 #endif

@@ -25,12 +25,12 @@ int		loop_game(t_map *tab)
 			display_ray_gun(tab);
 			// if (tab->len.x == tab->res_x /2)
 			// {
-				// printf("\ntab->len.wallX = %f\n",tab->len.wallX);
-	// 		
-				// printf("\nresYY = %d\n",tab->res_y);				
-	// 			// printf("\nH = %d et W = %d\n", tab->dst_N.height, tab->dst_N.width);
-	// 			// printf("\nH %d W %d\n", tab->dst_S.height, tab->dst_S.width);
-				// printf("\nresX %d et resY %d\n", tab->res_x, tab->res_y);
+			// 	printf("\ntab->len.wallX = %f\n",tab->len.wallX);
+			
+			// 	printf("\nresYY = %d\n",tab->res_y);				
+			// 	// printf("\nH = %d et W = %d\n", tab->dst_N.height, tab->dst_N.width);
+			// 	// printf("\nH %d W %d\n", tab->dst_S.height, tab->dst_S.width);
+			// 	printf("\nresX %d et resY %d\n", tab->res_x, tab->res_y);
 			// }
 		}
 		mlx_put_image_to_window(tab->mlx.mlx_ptr, tab->mlx.win, tab->mlx.img, 0, 0);
@@ -74,8 +74,8 @@ int		main(int ac, char **av)
 
 	// while (tab->map[i])
 	// {
-		// printf("\n|%s|\n", tab->map[i]);
-		// i++;
+	// 	printf("\n|%s|\n", tab->map[i]);
+	// 	i++;
 	// }
 	ft_init_mlx(tab);
 	mlx_hook (tab->mlx.win, 2, 0, key_press, tab);

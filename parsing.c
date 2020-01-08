@@ -6,7 +6,7 @@
 /*   By: thverney <thverney@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/12 04:13:10 by thverney          #+#    #+#             */
-/*   Updated: 2019/12/17 05:04:54 by thverney         ###   ########.fr       */
+/*   Updated: 2020/01/08 14:05:27 by thverney         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,14 @@ void	clean_map(t_map *tab)
 				res[j++] = tab->map[k][i];
 				(res[j - 1] != '1' && res[j - 1] != '0' && res[j - 1] != '2' 
 				? tab->tmp_err++ : 0);
+				res[j - 1] == '2' ? ft_sprites_stock((double)k, (double)i, tab) : 0;
 			}
 		}
 		res[j] = 0;
 		free(tab->map[k]);
 		tab->map[k] = res;
 	}
+	print_sprite(tab);	
 }
 
 void	doc_checker(char *str, t_map *tab)
